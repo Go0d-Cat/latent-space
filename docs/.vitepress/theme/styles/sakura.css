@@ -1,0 +1,116 @@
+/**
+ * 樱花粉主题：浅色樱花粉，深色偏紫的夜色 + 浅粉高亮
+ */
+
+/* ---------- 浅色模式 ---------- */
+html[data-theme='sakura'] {
+  --ls-pink-1: #c2255c;
+  --ls-pink-2: #d6336c;
+  --ls-pink-3: #e64980;
+  --ls-pink-4: #f06595;
+  --ls-lilac: #b197fc;
+
+  --vp-c-brand-1: var(--ls-pink-2);
+  --vp-c-brand-2: var(--ls-pink-3);
+  --vp-c-brand-3: var(--ls-pink-4);
+  --vp-c-brand-soft: rgba(240, 101, 149, 0.14);
+
+  /* 背景带一点点粉 */
+  --vp-c-bg-alt: #fff7fa;
+  --vp-c-bg-soft: #fff0f5;
+  --vp-c-divider: #f5dbe5;
+  --vp-c-gutter: #f5dbe5;
+
+  /* 按钮用深一档的粉色，保证白字可读 */
+  --vp-button-brand-bg: var(--ls-pink-3);
+  --vp-button-brand-hover-bg: var(--ls-pink-2);
+  --vp-button-brand-active-bg: var(--ls-pink-1);
+
+  /* 首页大标题渐变 */
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(120deg, #f06595 25%, #b197fc);
+
+  --vp-custom-block-tip-bg: rgba(240, 101, 149, 0.08);
+}
+
+/* ---------- 深色模式 ---------- */
+html.dark[data-theme='sakura'] {
+  --vp-c-brand-1: #faa2c1;
+  --vp-c-brand-2: #f783ac;
+  --vp-c-brand-3: #e64980;
+  --vp-c-brand-soft: rgba(247, 131, 172, 0.16);
+
+  --vp-c-bg: #1e1a21;
+  --vp-c-bg-alt: #18151b;
+  --vp-c-bg-soft: #2a2430;
+  --vp-c-divider: #3a3040;
+  --vp-c-gutter: #120f14;
+
+  --vp-button-brand-bg: #d6336c;
+  --vp-button-brand-hover-bg: #e64980;
+  --vp-button-brand-active-bg: #c2255c;
+
+  --vp-home-hero-name-background: linear-gradient(120deg, #faa2c1 25%, #d0bfff);
+
+  --vp-custom-block-tip-bg: rgba(247, 131, 172, 0.1);
+}
+
+/* ---------- 细节 ---------- */
+html[data-theme='sakura'] ::selection {
+  background: rgba(240, 101, 149, 0.28);
+}
+
+/* 导航栏站点标题渐变 */
+html[data-theme='sakura'] .VPNavBarTitle .title span {
+  background: var(--vp-home-hero-name-background);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
+
+/* 首页背景：顶部一层柔和的粉色光 */
+html[data-theme='sakura'] .VPContent.is-home {
+  background:
+    radial-gradient(1200px 500px at 50% -10%, rgba(240, 101, 149, 0.12), transparent 70%),
+    radial-gradient(800px 400px at 90% 10%, rgba(177, 151, 252, 0.1), transparent 70%);
+}
+
+/* 首页卡片：悬停时上浮并泛粉光 */
+html[data-theme='sakura'] .VPFeature {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+html[data-theme='sakura'] .VPFeature.link:hover {
+  transform: translateY(-4px);
+  border-color: var(--vp-c-brand-3);
+  box-shadow: 0 12px 32px -12px rgba(230, 73, 128, 0.35);
+}
+
+/* 正文：引用块和标题 */
+html[data-theme='sakura'] .vp-doc blockquote {
+  border-left-color: var(--vp-c-brand-3);
+  background: var(--vp-c-brand-soft);
+  border-radius: 0 8px 8px 0;
+  padding: 8px 16px;
+}
+
+html[data-theme='sakura'] .vp-doc blockquote > p {
+  color: var(--vp-c-text-1);
+}
+
+html[data-theme='sakura'] .vp-doc h2 {
+  border-top: none;
+  padding-top: 0;
+}
+
+html[data-theme='sakura'] .vp-doc h2::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 1em;
+  margin-right: 10px;
+  vertical-align: -0.12em;
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--ls-pink-4), var(--ls-lilac));
+}

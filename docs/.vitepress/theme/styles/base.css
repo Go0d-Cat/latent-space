@@ -1,0 +1,10 @@
+/**
+ * 与主题无关的全局样式
+ */
+
+/* 隐藏 VitePress 自带的语言菜单（带图标），改用导航栏里的文字下拉框 LangSwitcher */
+.VPNavBarTranslations,
+.VPNavScreenTranslations,
+.VPNavBarExtra .group.translations {
+  display: none !important;
+}

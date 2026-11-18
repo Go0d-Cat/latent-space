@@ -1,0 +1,427 @@
+/**
+ * macOS 毛玻璃主题（浅色 / 深色）
+ * 三层灰阶靠明度区分层级；侧边栏、工具栏、浮层用 80% 不透明 + 40px 模糊；
+ * 分隔线一律 1px、低透明度；标题衬线、正文系统无衬线；动效只改颜色，200ms ease-out。
+ *
+ * 结构：下面第一段是浅色 token + 到 VitePress 变量的映射，第二段 html.dark 只覆盖 token。
+ * 组件样式只引用 --mac-* token，不写死颜色，深浅色自动跟随。
+ */
+
+/* ---------- 浅色 token：参考 macOS 浅色外观 ---------- */
+html[data-theme='macos'] {
+  --mac-base: #f5f5f7; /* 侧边栏底色、代码块 */
+  --mac-content: #ffffff; /* 内容区 */
+  --mac-raised: #f5f5f7; /* 卡片 */
+  --mac-raised-hover: #ececf0;
+  --mac-control: #e8e8ed; /* 次要按钮 */
+  --mac-elevated: #ffffff; /* 弹出层底色 */
+  --mac-vibrancy: rgba(242, 242, 247, 0.8);
+  --mac-toolbar: rgba(246, 246, 246, 0.8);
+  --mac-popover: rgba(255, 255, 255, 0.8);
+
+  --mac-accent: #007aff; /* 填充用的系统蓝 */
+  --mac-link: #0066cc; /* 文字链接用深一档的蓝，白底上更易读 */
+  --mac-green: #34c759;
+  --mac-orange: #ff9500;
+  --mac-red: #ff3b30;
+
+  --mac-text-1: rgba(0, 0, 0, 0.85);
+  --mac-text-2: rgba(0, 0, 0, 0.55);
+  --mac-text-3: rgba(0, 0, 0, 0.3);
+
+  --mac-line: rgba(0, 0, 0, 0.1);
+  --mac-line-soft: rgba(0, 0, 0, 0.06);
+  --mac-border: rgba(0, 0, 0, 0.12);
+  --mac-hover: rgba(0, 0, 0, 0.05);
+  --mac-selected: rgba(0, 122, 255, 0.12);
+  --mac-selection: rgba(0, 122, 255, 0.25);
+  --mac-code-inline: rgba(0, 0, 0, 0.05);
+  --mac-success-soft: rgba(52, 199, 89, 0.14);
+  --mac-warning-soft: rgba(255, 149, 0, 0.14);
+  --mac-danger-soft: rgba(255, 59, 48, 0.12);
+
+  --mac-shadow-panel: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 20px 48px rgba(0, 0, 0, 0.18);
+  --mac-shadow-popover: 0 12px 32px rgba(0, 0, 0, 0.15);
+
+  color-scheme: light;
+
+  /* 与深浅色无关的 token */
+  --mac-blur: blur(40px);
+  --mac-ease: 200ms ease-out;
+  --mac-font-serif: Georgia, 'New York', 'Times New Roman', 'Noto Serif SC', 'Source Han Serif SC',
+    'Songti SC', serif;
+
+  /* ---------- 映射到 VitePress 变量 ---------- */
+  --vp-font-family-base: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui,
+    'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --vp-font-family-mono: 'SF Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --vp-c-bg: var(--mac-content);
+  --vp-c-bg-alt: var(--mac-base);
+  --vp-c-bg-elv: var(--mac-elevated);
+  --vp-c-bg-soft: var(--mac-raised);
+
+  --vp-c-text-1: var(--mac-text-1);
+  --vp-c-text-2: var(--mac-text-2);
+  --vp-c-text-3: var(--mac-text-3);
+
+  --vp-c-border: var(--mac-border);
+  --vp-c-divider: var(--mac-line);
+  --vp-c-gutter: var(--mac-line-soft);
+
+  --vp-c-brand-1: var(--mac-link);
+  --vp-c-brand-2: var(--mac-accent);
+  --vp-c-brand-3: var(--mac-accent);
+  --vp-c-brand-soft: var(--mac-selected);
+
+  --vp-c-success-1: var(--mac-green);
+  --vp-c-success-2: var(--mac-green);
+  --vp-c-success-3: var(--mac-green);
+  --vp-c-success-soft: var(--mac-success-soft);
+  --vp-c-warning-1: var(--mac-orange);
+  --vp-c-warning-2: var(--mac-orange);
+  --vp-c-warning-3: var(--mac-orange);
+  --vp-c-warning-soft: var(--mac-warning-soft);
+  --vp-c-danger-1: var(--mac-red);
+  --vp-c-danger-2: var(--mac-red);
+  --vp-c-danger-3: var(--mac-red);
+  --vp-c-danger-soft: var(--mac-danger-soft);
+
+  --vp-button-brand-border: transparent;
+  --vp-button-brand-text: #fff;
+  --vp-button-brand-bg: var(--mac-accent);
+  --vp-button-brand-hover-border: transparent;
+  --vp-button-brand-hover-text: #fff;
+  --vp-button-brand-hover-bg: var(--mac-accent);
+  --vp-button-brand-active-border: transparent;
+  --vp-button-brand-active-text: #fff;
+  --vp-button-brand-active-bg: var(--mac-accent);
+  --vp-button-alt-border: transparent;
+  --vp-button-alt-bg: var(--mac-control);
+  --vp-button-alt-text: var(--mac-text-1);
+  --vp-button-alt-hover-border: transparent;
+  --vp-button-alt-hover-bg: var(--mac-control);
+  --vp-button-alt-hover-text: var(--mac-text-1);
+  --vp-button-alt-active-border: transparent;
+  --vp-button-alt-active-bg: var(--mac-control);
+  --vp-button-alt-active-text: var(--mac-text-1);
+
+  --vp-nav-height: 52px;
+  --vp-nav-bg-color: var(--mac-toolbar);
+  --vp-sidebar-bg-color: var(--mac-vibrancy);
+  --vp-local-nav-bg-color: var(--mac-content);
+  --vp-local-search-bg: var(--mac-popover);
+
+  --vp-home-hero-name-color: var(--mac-text-1);
+  --vp-home-hero-name-background: transparent;
+
+  --vp-code-block-bg: var(--mac-base);
+  --vp-code-bg: var(--mac-code-inline);
+  --vp-code-color: var(--mac-text-1);
+
+  --vp-shadow-3: var(--mac-shadow-popover);
+  --vp-shadow-4: var(--mac-shadow-panel);
+  --vp-shadow-5: var(--mac-shadow-panel);
+}
+
+/* ---------- 深色 token：参考风格文档 ---------- */
+html.dark[data-theme='macos'] {
+  --mac-base: #1c1c1e;
+  --mac-content: #2c2c2e;
+  --mac-raised: #3a3a3c;
+  --mac-raised-hover: #424245;
+  --mac-control: #3a3a3c;
+  --mac-elevated: #3a3a3c;
+  --mac-vibrancy: rgba(28, 28, 30, 0.8);
+  --mac-toolbar: rgba(58, 58, 60, 0.8);
+  --mac-popover: rgba(44, 44, 46, 0.8);
+
+  --mac-accent: #0a84ff;
+  --mac-link: #0a84ff;
+  --mac-green: #30d158;
+  --mac-orange: #ff9f0a;
+  --mac-red: #ff453a;
+
+  --mac-text-1: rgba(255, 255, 255, 0.92);
+  --mac-text-2: rgba(255, 255, 255, 0.6);
+  --mac-text-3: rgba(255, 255, 255, 0.38);
+
+  --mac-line: rgba(255, 255, 255, 0.1);
+  --mac-line-soft: rgba(255, 255, 255, 0.08);
+  --mac-border: rgba(255, 255, 255, 0.12);
+  --mac-hover: rgba(255, 255, 255, 0.08);
+  --mac-selected: rgba(10, 132, 255, 0.18);
+  --mac-selection: rgba(10, 132, 255, 0.4);
+  --mac-code-inline: rgba(255, 255, 255, 0.08);
+  --mac-success-soft: rgba(48, 209, 88, 0.16);
+  --mac-warning-soft: rgba(255, 159, 10, 0.16);
+  --mac-danger-soft: rgba(255, 69, 58, 0.16);
+
+  --mac-shadow-panel: 0 1px 0 rgba(255, 255, 255, 0.08) inset, 0 20px 48px rgba(0, 0, 0, 0.5);
+  --mac-shadow-popover: 0 12px 32px rgba(0, 0, 0, 0.55);
+
+  color-scheme: dark;
+}
+
+html[data-theme='macos'] ::selection {
+  background: var(--mac-selection);
+}
+
+/* ---------- 工具栏（顶部导航） ---------- */
+html[data-theme='macos'] .VPNavBar {
+  background-color: var(--mac-toolbar) !important;
+  -webkit-backdrop-filter: var(--mac-blur);
+  backdrop-filter: var(--mac-blur);
+  border-bottom: 1px solid var(--mac-line);
+}
+
+html[data-theme='macos'] .VPNavBar .title,
+html[data-theme='macos'] .VPNavBar .content-body {
+  background-color: transparent !important;
+}
+
+html[data-theme='macos'] .VPNavBar .divider {
+  display: none;
+}
+
+html[data-theme='macos'] .VPNavBarTitle .title {
+  border-bottom-color: transparent !important;
+  font-family: var(--mac-font-serif);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+html[data-theme='macos'] .VPNavBarMenuLink {
+  font-size: 13px;
+  transition: color var(--mac-ease);
+}
+
+html[data-theme='macos'] .VPNavBarSearchButton {
+  border-radius: 6px;
+  transition: background-color var(--mac-ease);
+}
+
+/* ---------- 侧边栏（Vibrancy Sidebar） ---------- */
+html[data-theme='macos'] .VPSidebar {
+  -webkit-backdrop-filter: var(--mac-blur);
+  backdrop-filter: var(--mac-blur);
+  border-right: 1px solid var(--mac-line);
+}
+
+html[data-theme='macos'] .VPSidebar .curtain {
+  background-color: transparent;
+}
+
+html[data-theme='macos'] .VPSidebarItem > .item {
+  margin: 0 -8px;
+  padding: 0 8px;
+  width: calc(100% + 16px);
+  border-radius: 6px;
+  transition: background-color var(--mac-ease);
+}
+
+html[data-theme='macos'] .VPSidebarItem.is-link > .item:hover {
+  background-color: var(--mac-hover);
+}
+
+html[data-theme='macos'] .VPSidebarItem.is-active > .item {
+  background-color: var(--mac-selected);
+}
+
+html[data-theme='macos'] .VPSidebarItem .text {
+  font-size: 13px;
+  transition: color var(--mac-ease);
+}
+
+html[data-theme='macos'] .VPSidebarItem.is-active > .item .link > .text {
+  color: var(--vp-c-text-1) !important;
+}
+
+/* 分组标题：小号、弱化，像 Finder 侧边栏的分区名 */
+html[data-theme='macos'] .VPSidebarItem.level-0 > .item .text {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--vp-c-text-2);
+}
+
+html[data-theme='macos'] .VPSidebarItem .indicator {
+  display: none;
+}
+
+/* ---------- 首页 ---------- */
+html[data-theme='macos'] .VPHome .VPHero .name {
+  font-family: var(--mac-font-serif);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+html[data-theme='macos'] .VPHome .VPHero .text {
+  font-family: var(--mac-font-serif);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+html[data-theme='macos'] .VPHome .VPHero .tagline {
+  padding-top: 12px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--vp-c-text-2);
+}
+
+@media (min-width: 960px) {
+  html[data-theme='macos'] .VPHome .VPHero .name {
+    font-size: 40px;
+  }
+
+  html[data-theme='macos'] .VPHome .VPHero .text {
+    font-size: 32px;
+  }
+
+  html[data-theme='macos'] .VPHome .VPHero .tagline {
+    font-size: 17px;
+  }
+}
+
+/* System Button：只改颜色，hover 提亮 8%，按下压暗 10% */
+html[data-theme='macos'] .VPButton.medium {
+  padding: 6px 14px;
+  line-height: 1.4;
+  font-size: 13px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  transition: background-color var(--mac-ease), filter var(--mac-ease);
+}
+
+html[data-theme='macos'] .VPButton:hover {
+  filter: brightness(1.08);
+}
+
+html[data-theme='macos'] .VPButton:active {
+  filter: brightness(0.9);
+}
+
+/* 卡片 */
+html[data-theme='macos'] .VPFeature {
+  border: 1px solid var(--mac-line-soft);
+  border-radius: 10px;
+  background-color: var(--mac-raised);
+  transition: background-color var(--mac-ease), border-color var(--mac-ease);
+}
+
+html[data-theme='macos'] .VPFeature.link:hover {
+  border-color: var(--mac-line);
+  background-color: var(--mac-raised-hover);
+}
+
+html[data-theme='macos'] .VPFeature .box {
+  padding: 16px;
+}
+
+html[data-theme='macos'] .VPFeature .title {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+html[data-theme='macos'] .VPFeature .details,
+html[data-theme='macos'] .VPFeature .link-text-value {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ---------- 正文 ---------- */
+html[data-theme='macos'] .vp-doc {
+  font-size: 15px;
+}
+
+html[data-theme='macos'] .vp-doc p,
+html[data-theme='macos'] .vp-doc li {
+  line-height: 1.6;
+}
+
+html[data-theme='macos'] .vp-doc h1 {
+  font-family: var(--mac-font-serif);
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+html[data-theme='macos'] .vp-doc h2 {
+  font-family: var(--mac-font-serif);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1.25;
+  border-top: 1px solid var(--mac-line);
+}
+
+html[data-theme='macos'] .vp-doc h3 {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+html[data-theme='macos'] .vp-doc a {
+  transition: color var(--mac-ease), opacity var(--mac-ease);
+}
+
+html[data-theme='macos'] .vp-doc a:hover {
+  opacity: 0.8;
+}
+
+html[data-theme='macos'] .vp-doc blockquote {
+  border-left: 1px solid var(--mac-line);
+  color: var(--vp-c-text-2);
+}
+
+html[data-theme='macos'] .vp-doc div[class*='language-'] {
+  border: 1px solid var(--mac-line-soft);
+  border-radius: 10px;
+}
+
+html[data-theme='macos'] .vp-doc div[class*='language-'] code {
+  font-size: 13px;
+}
+
+html[data-theme='macos'] .vp-doc .custom-block {
+  border: 1px solid var(--mac-line-soft);
+  border-radius: 10px;
+}
+
+html[data-theme='macos'] .vp-doc table {
+  border-radius: 10px;
+}
+
+html[data-theme='macos'] .vp-doc tr {
+  border-top: 1px solid var(--mac-line-soft);
+}
+
+/* ---------- 浮层：搜索框与下拉菜单 ---------- */
+html[data-theme='macos'] .VPLocalSearchBox .shell {
+  border: 1px solid var(--mac-line);
+  border-radius: 14px;
+  -webkit-backdrop-filter: var(--mac-blur);
+  backdrop-filter: var(--mac-blur);
+  box-shadow: var(--mac-shadow-panel);
+}
+
+html[data-theme='macos'] .VPMenu {
+  border: 1px solid var(--mac-line);
+  border-radius: 10px;
+  background-color: var(--mac-popover);
+  -webkit-backdrop-filter: var(--mac-blur);
+  backdrop-filter: var(--mac-blur);
+  box-shadow: var(--mac-shadow-popover);
+}
+
+/* ---------- 页脚 ---------- */
+html[data-theme='macos'] .VPFooter {
+  border-top: 1px solid var(--mac-line);
+  font-size: 13px;
+}
