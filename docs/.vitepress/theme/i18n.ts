@@ -28,7 +28,34 @@ export function uiLang(lang: string): UiLang {
 }
 
 /** 自定义组件里的界面文字 */
-export const uiText: Record<UiLang, { theme: string; language: string }> = {
-  zh: { theme: '主题', language: '语言' },
-  en: { theme: 'Theme', language: 'Language' }
+export const uiText: Record<
+  UiLang,
+  {
+    theme: string
+    language: string
+    hideOutline: string
+    showOutline: string
+    resizeSidebar: string
+    resizeOutline: string
+    resizeHint: string
+  }
+> = {
+  zh: {
+    theme: '主题',
+    language: '语言',
+    hideOutline: '收起',
+    showOutline: '目录',
+    resizeSidebar: '调整侧边栏宽度',
+    resizeOutline: '调整文章目录宽度',
+    resizeHint: '拖动调整宽度，双击恢复默认'
+  },
+  en: {
+    theme: 'Theme',
+    language: 'Language',
+    hideOutline: 'Hide',
+    showOutline: 'Outline',
+    resizeSidebar: 'Resize sidebar',
+    resizeOutline: 'Resize outline',
+    resizeHint: 'Drag to resize, double-click to reset'
+  }
 }

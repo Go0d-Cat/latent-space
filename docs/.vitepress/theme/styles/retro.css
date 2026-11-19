@@ -231,16 +231,28 @@ html[data-theme='retro'] .vp-doc h2 {
   border-top: 3px dashed var(--vp-c-divider);
 }
 
-/* 二级标题前的像素方块 */
+/* 二级标题的编号做成像素徽章（编号本身由 base.css 的计数器生成） */
 html[data-theme='retro'] .vp-doc h2::before {
-  content: '';
+  content: counter(ls-h2);
   display: inline-block;
-  width: 0.5em;
-  height: 0.5em;
-  margin-right: 12px;
-  vertical-align: 0.12em;
+  min-width: 2em;
+  margin-right: 14px;
+  padding: 0 0.4em;
+  vertical-align: 0.3em;
   background: var(--ls-pink);
   box-shadow: 3px 3px 0 var(--ls-cyan);
+  color: #fff;
+  font-family: var(--ls-font-pixel);
+  font-size: 0.5em;
+  line-height: 2.2em;
+  text-align: center;
+}
+
+html[data-theme='retro'] .vp-doc h3::before {
+  color: var(--ls-pink);
+  font-family: var(--ls-font-pixel);
+  font-size: 0.7em;
+  vertical-align: 0.1em;
 }
 
 html[data-theme='retro'] .vp-doc blockquote {
@@ -277,13 +289,15 @@ html[data-theme='retro'] .vp-doc .custom-block {
 }
 
 /* ---------- 切换器（主题 / 语言） ---------- */
-html[data-theme='retro'] .ls-switcher select {
+html[data-theme='retro'] .ls-switcher select,
+html[data-theme='retro'] .ls-outline-toggle-button {
   border: 2px solid var(--ls-ink);
   border-radius: 0;
   box-shadow: 2px 2px 0 var(--ls-pink);
 }
 
-html.dark[data-theme='retro'] .ls-switcher select {
+html.dark[data-theme='retro'] .ls-switcher select,
+html.dark[data-theme='retro'] .ls-outline-toggle-button {
   border-color: var(--ls-cyan);
 }
 

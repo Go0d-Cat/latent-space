@@ -8,3 +8,164 @@
 .VPNavBarExtra .group.translations {
   display: none !important;
 }
+
+/* ---------- 文章目录：宽度可调、可收起 ---------- */
+
+/*
+ * 两栏宽度都分「用户设置」和「实际生效」两层，实际宽度不超过可用空间，保证正文文字区至少 26rem：
+ * - --ls-sidebar-width / --ls-outline-width：用户设置的宽度，ResizeHandle 会在 <html> 上覆盖。
+ * - --vp-sidebar-width（VitePress 自带）/ --ls-outline-actual：实际生效的宽度。
+ * 横向空间 = min(视口, 90rem) − 侧边栏，依次分给：页面左右留白 4rem、正文左右留白 4rem、
+ * 正文文字区 ≥ 26rem、目录左侧留白 2rem、目录 ≥ 10rem。
+ */
+:root {
+  --ls-sidebar-width: 17rem;
+  --ls-outline-width: 14rem;
+  --ls-outline-max: calc(min(100vw, var(--vp-layout-max-width)) - var(--vp-sidebar-width) - 4rem - 4rem - 26rem - 2rem);
+  --ls-outline-actual: max(10rem, min(var(--ls-outline-width), var(--ls-outline-max)));
+}
+
+/* html:root 的优先级高于 VitePress 的 :root，用来覆盖 --vp-sidebar-width；960px 以下侧边栏是浮层，不受这个变量控制 */
+@media (min-width: 960px) {
+  html:root {
+    /* 没有固定目录时：留出页面留白 4rem + 正文留白 4rem + 文字区 26rem = 34rem */
+    --vp-sidebar-width: max(12.5rem, min(var(--ls-sidebar-width), calc(100vw - 34rem)));
+  }
+}
+
+/* 有固定目录时再留出目录的最小宽度 10rem 和左侧留白 2rem；收起目录后侧边栏可以用回这部分空间 */
+@media (min-width: 1024px) {
+  html:root:not(.ls-outline-hidden) {
+    --vp-sidebar-width: max(12.5rem, min(var(--ls-sidebar-width), calc(min(100vw, var(--vp-layout-max-width)) - 34rem - 12rem)));
+  }
+}
+
+/*
+ * 右侧固定目录从 1024px 起显示（VitePress 默认 1280px）。
+ * Windows 笔记本常开 150%~200% 缩放，2K 屏全屏时 CSS 宽度往往只有 1100~1300px。
+ * 修改断点时要同步 layoutPrefs.ts 里的 OUTLINE.media。
+ */
+@media (min-width: 1024px) {
+  .VPDoc .container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .VPDoc .container .aside {
+    display: block;
+  }
+
+  .VPDoc .container .content {
+    order: 1;
+    margin: 0;
+    min-width: 0;
+  }
+
+  /* 有固定目录时不再需要顶部的「本页目录」弹出菜单 */
+  .Layout:has(.VPDoc.has-aside) .VPLocalNav {
+    display: none;
+  }
+}
+
+/* 目录栏宽度固定为实际宽度，不随正文伸缩，保证和 position: fixed 的目录内容对齐 */
+.VPDoc .container .aside {
+  flex: 0 0 auto;
+  width: calc(var(--ls-outline-actual) + 2rem);
+  max-width: none;
+}
+
+.VPDoc .aside .aside-container,
+.VPDoc .aside .aside-curtain {
+  width: var(--ls-outline-actual);
+}
+
+/* 收起目录后隐藏右栏，正文放宽到 VitePress 无目录页面的宽度 */
+html.ls-outline-hidden .VPDoc .aside {
+  display: none !important;
+}
+
+html.ls-outline-hidden .VPDoc.has-aside .content-container {
+  max-width: 49rem;
+}
+
+/* 拖动过程中保持拖动光标，并避免误选中页面文字 */
+html.ls-resizing,
+html.ls-resizing * {
+  cursor: col-resize !important;
+  user-select: none !important;
+}
+
+/* ---------- 标题自动编号 ---------- */
+/*
+ * 正文和文章目录各自用 CSS 计数器编号，规则相同：h2 为「1.」「2.」，h3 为「1.1」「1.2」。
+ * 不需要编号的页面在 frontmatter 里设置 pageClass: no-heading-numbers。
+ * 各主题可以调整编号的样式；覆盖 content 时要保留计数器，只改格式。
+ */
+.vp-doc {
+  counter-reset: ls-h2;
+}
+
+.vp-doc h2 {
+  counter-increment: ls-h2;
+  counter-reset: ls-h3;
+}
+
+.vp-doc h3 {
+  counter-increment: ls-h3;
+}
+
+.vp-doc h2::before {
+  content: counter(ls-h2) '.';
+  margin-inline-end: 0.5em;
+}
+
+.vp-doc h3::before {
+  content: counter(ls-h2) '.' counter(ls-h3);
+  margin-inline-end: 0.5em;
+}
+
+/*
+ * 文章目录有两处：宽屏右侧的固定目录（第一层列表带 .root），和窄屏顶部「本页目录」弹出菜单
+ * （.VPLocalNavOutlineDropdown，第一层列表不带 .root）。两处都按层级位置编号。
+ */
+.VPDocOutlineItem.root,
+.VPLocalNavOutlineDropdown .outline > .VPDocOutlineItem {
+  counter-reset: ls-outline-h2;
+}
+
+.VPDocOutlineItem.root > li,
+.VPLocalNavOutlineDropdown .outline > .VPDocOutlineItem > li {
+  counter-increment: ls-outline-h2;
+}
+
+.VPDocOutlineItem.root > li > .VPDocOutlineItem,
+.VPLocalNavOutlineDropdown .outline > .VPDocOutlineItem > li > .VPDocOutlineItem {
+  counter-reset: ls-outline-h3;
+}
+
+.VPDocOutlineItem.root > li > .VPDocOutlineItem > li,
+.VPLocalNavOutlineDropdown .outline > .VPDocOutlineItem > li > .VPDocOutlineItem > li {
+  counter-increment: ls-outline-h3;
+}
+
+.VPDocOutlineItem.root > li > .outline-link::before,
+.VPLocalNavOutlineDropdown .outline > .VPDocOutlineItem > li > .outline-link::before {
+  content: counter(ls-outline-h2) '.';
+  margin-inline-end: 0.4em;
+  color: var(--vp-c-text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.VPDocOutlineItem.root > li > .VPDocOutlineItem > li > .outline-link::before,
+.VPLocalNavOutlineDropdown .outline > .VPDocOutlineItem > li > .VPDocOutlineItem > li > .outline-link::before {
+  content: counter(ls-outline-h2) '.' counter(ls-outline-h3);
+  margin-inline-end: 0.4em;
+  color: var(--vp-c-text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.no-heading-numbers .vp-doc h2::before,
+.no-heading-numbers .vp-doc h3::before,
+.no-heading-numbers .VPDocOutlineItem .outline-link::before {
+  content: none !important;
+}

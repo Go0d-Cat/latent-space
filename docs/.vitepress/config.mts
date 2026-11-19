@@ -3,6 +3,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineConfigWithTheme, type DefaultTheme, type LocaleSpecificConfig } from 'vitepress'
 import { themeInitScript } from './theme/themes.ts'
+import { layoutInitScript } from './theme/layoutPrefs.ts'
 import { localePrefix, routeOf, type SiteThemeConfig } from './theme/i18n.ts'
 
 const DOCS_DIR = fileURLToPath(new URL('..', import.meta.url))
@@ -139,8 +140,11 @@ export default defineConfigWithTheme<SiteThemeConfig>({
   title: 'Latent Space',
   cleanUrls: true,
   lastUpdated: true,
-  // 首屏渲染前设置 data-theme，避免切换过主题的访客看到默认主题闪一下
-  head: [['script', {}, themeInitScript()]],
+  // 首屏渲染前恢复主题和阅读布局偏好，避免页面闪一下或布局跳动
+  head: [
+    ['script', {}, themeInitScript()],
+    ['script', {}, layoutInitScript()]
+  ],
 
   locales: {
     root: { label: '简体中文', ...zh },

@@ -104,13 +104,12 @@ html[data-theme='sakura'] .vp-doc h2 {
   padding-top: 0;
 }
 
-html[data-theme='sakura'] .vp-doc h2::before {
-  content: '';
-  display: inline-block;
-  width: 6px;
-  height: 1em;
-  margin-right: 10px;
-  vertical-align: -0.12em;
-  border-radius: 3px;
-  background: linear-gradient(180deg, var(--ls-pink-4), var(--ls-lilac));
+/* 标题编号（由 base.css 的计数器生成）用粉紫渐变色 */
+html[data-theme='sakura'] .vp-doc h2::before,
+html[data-theme='sakura'] .vp-doc h3::before {
+  background: linear-gradient(120deg, var(--ls-pink-4), var(--ls-lilac));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
 }
